@@ -579,7 +579,7 @@ GameInteractionEffectQueryResult GameInteractor::RawAction::SpawnActorRelative(u
     // z' = z * cos(theta) - x * sin(theta)
     // where x is Right and z is Forward.
 
-    f32 theta = player->actor.shape.rot.y * (M_PI / 32768.0f);
+    f32 theta = player->actor.shape.rot.y * ((float)M_PI / 32768.0f);
     f32 cosRot = cosf(theta);
     f32 sinRot = sinf(theta);
 
@@ -590,7 +590,6 @@ GameInteractionEffectQueryResult GameInteractor::RawAction::SpawnActorRelative(u
     spawnPos.z = player->actor.world.pos.z + (zOffset * cosRot - xOffset * sinRot);
 
     if (snapToFloor) {
-        CollisionPoly* poly = nullptr;
         CollisionPoly poly;
         Vec3f raycastPos = spawnPos;
         raycastPos.y += 50.0f; // Start raycast from slightly above to catch floor at player height
@@ -602,7 +601,6 @@ GameInteractionEffectQueryResult GameInteractor::RawAction::SpawnActorRelative(u
     }
 
     Actor* actor = Actor_Spawn(&gPlayState->actorCtx, gPlayState, actorId, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
-                               actorParams);
                                actorParams, 0);
 
     if (actor != NULL) {
