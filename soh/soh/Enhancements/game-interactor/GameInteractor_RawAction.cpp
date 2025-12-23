@@ -15,6 +15,7 @@ extern PlayState* gPlayState;
 
 #include "overlays/actors/ovl_En_Niw/z_en_niw.h"
 #include "overlays/actors/ovl_En_Bom/z_en_bom.h"
+#include "soh/Enhancements/custom-message/CustomMessageManager.h"
 
 void GameInteractor::RawAction::AddOrRemoveHealthContainers(int16_t amount) {
     gSaveContext.healthCapacity += amount * FULL_HEART_HEALTH;
@@ -589,6 +590,7 @@ GameInteractionEffectQueryResult GameInteractor::RawAction::SpawnActorRelative(u
     spawnPos.z = player->actor.world.pos.z + (zOffset * cosRot - xOffset * sinRot);
 
     if (snapToFloor) {
+        CollisionPoly* poly = nullptr;
         CollisionPoly poly;
         Vec3f raycastPos = spawnPos;
         raycastPos.y += 50.0f; // Start raycast from slightly above to catch floor at player height
@@ -600,6 +602,7 @@ GameInteractionEffectQueryResult GameInteractor::RawAction::SpawnActorRelative(u
     }
 
     Actor* actor = Actor_Spawn(&gPlayState->actorCtx, gPlayState, actorId, spawnPos.x, spawnPos.y, spawnPos.z, 0, 0, 0,
+                               actorParams);
                                actorParams, 0);
 
     if (actor != NULL) {
